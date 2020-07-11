@@ -1,0 +1,129 @@
+openapi: 3.0.2
+info:
+  title: Ronnies API
+  version: 1.0.0
+paths:
+  /ronnies:
+    summary: Path used to manage the list of ronnies.
+    description: >-
+      The REST endpoint/path used to list and create zero or more `Ronny` entities.  This path contains
+      a `GET` and `POST` operation to perform the list and create tasks, respectively.
+    get:
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Ronny'
+          description: Successful response - returns an array of `Ronny` entities.
+      operationId: GetRonnies
+      summary: List All ronnies
+      description: Gets a list of all `Ronny` entities.
+    post:
+      requestBody:
+        description: A new `Ronny` to be created.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateOrUpdateRonny'
+        required: true
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Ronny'
+          description: Successful response.
+      operationId: CreateRonny
+      summary: Create a Ronny
+      description: Creates a new instance of a `Ronny`.
+  '/ronnies/{ronnyId}':
+    summary: Path used to manage a single Ronny.
+    description: >-
+      The REST endpoint/path used to get, update, and delete single instances of an `Ronny`.  This path
+      contains `GET`, `PUT`, and `DELETE` operations used to perform the get, update, and delete tasks,
+      respectively.
+    get:
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Ronny'
+          description: Successful response - returns a single `Ronny`.
+      operationId: GetRonny
+      summary: Get a Ronny
+      description: Gets the details of a single instance of a `Ronny`.
+    put:
+      requestBody:
+        description: Updated `Ronny` information.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateOrUpdateRonny'
+        required: true
+      responses:
+        '202':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Ronny'
+          description: Successful response.
+      operationId: UpdateRonny
+      summary: Update a Ronny
+      description: Updates an existing `Ronny`.
+    delete:
+      responses:
+        '204':
+          description: Successful response.
+      operationId: DeleteRonny
+      summary: Delete a Ronny
+      description: Deletes an existing `Ronny`.
+    parameters:
+      -
+        name: ronnyId
+        description: A unique identifier for a `Ronny`.
+        schema:
+          type: string
+        in: path
+        required: true
+components:
+  schemas:
+    Ronny:
+      title: Root Type for Ronny
+      description: ''
+      required:
+        - created
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        price:
+          format: double
+          type: number
+        created:
+          format: date
+          description: ''
+          type: string
+      example:
+        id: 97b49e4e-95a0-4678-8110-a35acc956cf9
+        name: Cafe X
+        price: 3.2
+        created: '2020-07-11T13:33:38.417Z'
+    CreateOrUpdateRonny:
+      title: Root Type for CreateOrUpdateRonny
+      description: ''
+      type: object
+      properties:
+        name:
+          type: string
+        price:
+          format: double
+          type: number
+      example:
+        name: Cafe Y
+        price: 3
