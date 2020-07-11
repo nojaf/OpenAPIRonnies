@@ -12,13 +12,11 @@ paths:
       responses:
         '200':
           content:
-            application/json:
+            application/json; odata.metadata=minimal; odata.streaming=true; charset=utf-8:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Ronny'
+                $ref: '#/components/schemas/ODataResponse'
           description: Successful response - returns an array of `Ronny` entities.
-      operationId: GetRonnies
+      operationId: GetRonniesOData
       summary: List All ronnies
       description: Gets a list of all `Ronny` entities.
     post:
@@ -127,3 +125,39 @@ components:
       example:
         name: Cafe Y
         price: 3
+    ODataResponse:
+      title: Root Type for ODataResponse
+      description: ''
+      type: object
+      properties:
+        '@odata.context':
+          type: string
+        value:
+          type: array
+          items:
+            type: object
+            properties:
+              Id:
+                type: string
+              Name:
+                type: string
+              Price:
+                format: int32
+                type: integer
+              Created:
+                type: string
+      example:
+        '@odata.context': 'http://localhost:5000/$metadata#Ronnies'
+        value:
+          -
+            Id: e8c13a41-0197-475a-afc0-4a7756592087
+            Name: Cafe A
+            Price: 3
+            Created: '2020-07-11T19:38:13.5799296Z'
+  responses:
+    ODataResponse:
+      content:
+        application/json; odata.metadata=minimal; odata.streaming=true; charset=utf-8:
+          schema:
+            $ref: '#/components/schemas/ODataResponse'
+      description: ''

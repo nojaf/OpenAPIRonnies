@@ -10,6 +10,7 @@
         <PackageReference Include="FluentValidation" Version="9.0.0" />
         <PackageReference Include="FluentValidation.AspNetCore" Version="9.0.0" />
         <PackageReference Include="Microsoft.AspNetCore.App" />
+        <PackageReference Include="Microsoft.AspNetCore.OData" Version="7.4.1" />
         <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.2.0" PrivateAssets="All" />
         <PackageReference Include="NSwag.MSBuild" Version="13.6.2" />
     </ItemGroup>

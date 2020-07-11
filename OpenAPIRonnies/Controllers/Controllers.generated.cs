@@ -20,9 +20,7 @@ namespace OpenAPIRonnies
     [System.CodeDom.Compiler.GeneratedCode("NSwag", "13.6.2.0 (NJsonSchema v10.1.23.0 (Newtonsoft.Json v11.0.0.0))")]
     public interface IController
     {
-        /// <summary>List All ronnies xx</summary>
-        /// <returns>Successful response - returns an array of `Ronny` entities.</returns>
-        System.Threading.Tasks.Task<SwaggerResponse<System.Collections.Generic.ICollection<Ronny>>> GetRonniesAsync();
+        System.Linq.IQueryable GetRonniesOData { get; }
     
         /// <summary>Create a Ronny</summary>
         /// <param name="body">A new `Ronny` to be created.</param>
@@ -44,11 +42,10 @@ namespace OpenAPIRonnies
         /// <param name="ronnyId">A unique identifier for a `Ronny`.</param>
         /// <returns>Successful response.</returns>
         System.Threading.Tasks.Task<SwaggerResponse> DeleteRonnyAsync(string ronnyId);
-    
     }
     
     [System.CodeDom.Compiler.GeneratedCode("NSwag", "13.6.2.0 (NJsonSchema v10.1.23.0 (Newtonsoft.Json v11.0.0.0))")]
-    public partial class Controller : Microsoft.AspNetCore.Mvc.ControllerBase
+    public partial class Controller : Microsoft.AspNet.OData.ODataController
     {
         private IController _implementation;
     
@@ -57,25 +54,12 @@ namespace OpenAPIRonnies
             _implementation = implementation;
         }
     
-        /// <summary>List All ronnies xx</summary>
-        /// <returns>Successful response - returns an array of `Ronny` entities.</returns>
-        [Microsoft.AspNetCore.Mvc.HttpGet, Microsoft.AspNetCore.Mvc.Route("ronnies")]
-        public async System.Threading.Tasks.Task<Microsoft.AspNetCore.Mvc.IActionResult> GetRonnies()
+        [Microsoft.AspNetCore.Mvc.HttpGet]
+        [Microsoft.AspNet.OData.EnableQuery]
+        [Microsoft.AspNet.OData.Routing.ODataRoute("ronnies")]
+        public Microsoft.AspNetCore.Mvc.IActionResult GetRonniesOData()
         {
-            if(! ModelState.IsValid) {
-                // maybe map model to different type
-                return this.CreateBadRequestFromModelState();
-            }
-    
-            var result = await _implementation.GetRonniesAsync().ConfigureAwait(false);
-    
-            var status = (System.Net.HttpStatusCode)result.StatusCode;
-            var response = this.CreateResponse(status, result);
-    
-            foreach (var header in result.Headers)
-                Response.Headers.Add(header.Key, header.Value);
-    
-            return response;
+            return Ok(_implementation.GetRonniesOData);
         }
     
         /// <summary>Create a Ronny</summary>
@@ -166,7 +150,6 @@ namespace OpenAPIRonnies
     
             return response;
         }
-    
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "10.1.23.0 (Newtonsoft.Json v11.0.0.0)")]
@@ -206,6 +189,54 @@ namespace OpenAPIRonnies
     
         [Newtonsoft.Json.JsonProperty("price", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public double Price { get; set; }
+    
+        private System.Collections.Generic.IDictionary<string, object> _additionalProperties = new System.Collections.Generic.Dictionary<string, object>();
+    
+        [Newtonsoft.Json.JsonExtensionData]
+        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
+        {
+            get { return _additionalProperties; }
+            set { _additionalProperties = value; }
+        }
+    
+    
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "10.1.23.0 (Newtonsoft.Json v11.0.0.0)")]
+    public partial class ODataResponse 
+    {
+        [Newtonsoft.Json.JsonProperty("@odata.context", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string OdataContext { get; set; }
+    
+        [Newtonsoft.Json.JsonProperty("value", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public System.Collections.Generic.List<Value> Value { get; set; }
+    
+        private System.Collections.Generic.IDictionary<string, object> _additionalProperties = new System.Collections.Generic.Dictionary<string, object>();
+    
+        [Newtonsoft.Json.JsonExtensionData]
+        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
+        {
+            get { return _additionalProperties; }
+            set { _additionalProperties = value; }
+        }
+    
+    
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "10.1.23.0 (Newtonsoft.Json v11.0.0.0)")]
+    public partial class Value 
+    {
+        [Newtonsoft.Json.JsonProperty("Id", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string Id { get; set; }
+    
+        [Newtonsoft.Json.JsonProperty("Name", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string Name { get; set; }
+    
+        [Newtonsoft.Json.JsonProperty("Price", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public int Price { get; set; }
+    
+        [Newtonsoft.Json.JsonProperty("Created", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string Created { get; set; }
     
         private System.Collections.Generic.IDictionary<string, object> _additionalProperties = new System.Collections.Generic.Dictionary<string, object>();
     

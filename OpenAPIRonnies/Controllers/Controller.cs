@@ -22,6 +22,8 @@ namespace OpenAPIRonnies.Controllers
             return Task.FromResult(response);
         }
 
+        public IQueryable GetRonniesOData => _ronnyContext.Ronnies.AsQueryable();
+
         public async Task<SwaggerResponse<Ronny>> CreateRonnyAsync(CreateOrUpdateRonny body)
         {
             var ronny = CreateOrUpdateRonnyToDbRonny(body);
@@ -34,8 +36,7 @@ namespace OpenAPIRonnies.Controllers
 
         public async Task<SwaggerResponse<Ronny>> GetRonnyAsync(string ronnyId)
         {
-            Guid id;
-            if (Guid.TryParse(ronnyId, out id))
+            if (Guid.TryParse(ronnyId, out var id))
             {
                 var ronny = await _ronnyContext.Ronnies.FindAsync(id);
                 if (ronny != null)
@@ -55,8 +56,7 @@ namespace OpenAPIRonnies.Controllers
 
         public async Task<SwaggerResponse<Ronny>> UpdateRonnyAsync(CreateOrUpdateRonny body, string ronnyId)
         {
-            Guid id;
-            if (Guid.TryParse(ronnyId, out id))
+            if (Guid.TryParse(ronnyId, out var id))
             {
                 var existingRonny =  await _ronnyContext.Ronnies.FindAsync(id);
                 if (existingRonny != null)
@@ -79,8 +79,7 @@ namespace OpenAPIRonnies.Controllers
 
         public async Task<SwaggerResponse> DeleteRonnyAsync(string ronnyId)
         {
-            var id = Guid.Empty;
-            if (Guid.TryParse(ronnyId, out id))
+            if (Guid.TryParse(ronnyId, out var id))
             {
                 var ronny = await _ronnyContext.Ronnies.FindAsync(id);
                 _ronnyContext.Ronnies.Remove(ronny);

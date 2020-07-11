@@ -1,10 +1,13 @@
 ﻿using FluentValidation.AspNetCore;
+using Microsoft.AspNet.OData.Builder;
+using Microsoft.AspNet.OData.Extensions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.OData.Edm;
 using OpenAPIRonnies.Domain;
 using OpenAPIRonnies.Validations;
 
@@ -23,7 +26,10 @@ namespace OpenAPIRonnies
         public void ConfigureServices(IServiceCollection services)
         {
             services
-                .AddMvc()
+                .AddMvc(options =>
+                {
+                    options.EnableEndpointRouting = false;
+                })
                 .AddFluentValidation(fv =>
                 {
                     fv.RegisterValidatorsFromAssemblyContaining<CreateOrUpdateRonnyValidator>();
@@ -33,6 +39,7 @@ namespace OpenAPIRonnies
 
             services.AddDbContext<RonnyContext>(options => options.UseSqlServer("Server=localhost;Database=Ronnies;User Id=sa;Password=Password1!;"));
             services.AddTransient<IController, OpenAPIRonnies.Controllers.Controller>();
+            services.AddOData();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -56,7 +63,27 @@ namespace OpenAPIRonnies
             }
 
             // app.UseHttpsRedirection();
-            app.UseMvc();
+            app.UseMvc(routeBuilder =>
+            {
+                routeBuilder.Select().Filter();
+                routeBuilder.MapODataServiceRoute("odata", "", GetEdmModel());
+            });
+        }
+
+        private IEdmModel GetEdmModel()
+        {
+            var odataBuilder = new ODataConventionModelBuilder();
+
+            odataBuilder
+                .EntitySet<Domain.Ronny>("ronnies")
+                .EntityType
+                .Filter()
+                .Count()
+                .OrderBy()
+                .Page()
+                .Select();
+
+            return odataBuilder.GetEdmModel();
         }
     }
 }
