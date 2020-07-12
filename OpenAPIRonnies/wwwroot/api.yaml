@@ -136,16 +136,6 @@ components:
           type: array
           items:
             type: object
-            properties:
-              Id:
-                type: string
-              Name:
-                type: string
-              Price:
-                format: int32
-                type: integer
-              Created:
-                type: string
       example:
         '@odata.context': 'http://localhost:5000/$metadata#Ronnies'
         value:
