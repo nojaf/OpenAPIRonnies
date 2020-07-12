@@ -1,5 +1,3 @@
-using System;
-using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.TestHost;
 using Newtonsoft.Json;
@@ -40,7 +38,7 @@ namespace OpenAPIRonnies.Tests
                         await result
                             .Content
                             .ReadAsStringAsync()
-                            .ContinueWith(t => JsonConvert.DeserializeObject<OpenAPIRonnies.Tests.ODataResponse>(t.Result));
+                            .ContinueWith(t => JsonConvert.DeserializeObject<ODataResponse>(t.Result));
 
                     Assert.Equal(1, odataResponse.Value.Count);
 
